@@ -1,0 +1,17 @@
+# Changes here will be overwritten by Copier
+_commit: v0.2.0
+_src_path: https://github.com/ngriffiths13/prefect-poetry-setup.git
+author: Rielly Griffiths
+author_email: riellygriff@gmail.com
+ci_cd_pipelines: None
+deployment_infrastructure: Google Cloud Run
+docker_registry: riellygriff21
+docker_registry_type: DockerHub
+github_repo: riellygriff/Truvolley
+google_ar_region: None
+include_precommit: false
+package_name: Truvolley
+project_description: Rate beach volleyball players based on individual matches
+project_name: Truvolley
+storage_type: Github
+

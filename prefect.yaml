@@ -1,0 +1,23 @@
+# File for configuring project / deployment build, push and pull steps
+
+# Generic metadata about this project
+name: Truvolley
+prefect-version: 2.10.11
+
+build:
+# If you have any need for buildkit you will need to build your docker image in CI/CD instead of here.
+- prefect_docker.projects.steps.build_docker_image:
+    requires: prefect-docker>=0.2.0
+    image_name: riellygriff21/Truvolley
+    tag: latest
+    dockerfile: Dockerfile
+    push: true
+
+push: null
+
+# pull section allows you to provide instructions for cloning this project in remote locations
+pull:
+- prefect.projects.steps.git_clone_project:
+    repository: https://github.com/riellygriff/Truvolley.git
+    branch: main
+    access_token: '{{ prefect.blocks.secret.github-access-token }}'  # TODO: Create this secret block in Prefect Cloud
