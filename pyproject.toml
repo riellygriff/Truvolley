@@ -11,6 +11,8 @@ python = ">=3.10, <3.12"
 prefect = "^2.10.21"
 prefect-github = "^0.1.5"
 prefect-gcp = "^0.4.4"
+polars = "^0.18.7"
+google-cloud-bigquery-storage = "^2.22.0"
 
 [[tool.poetry.source]]
 name = "PyPI"
