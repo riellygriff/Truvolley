@@ -33,7 +33,6 @@ def past_tournaments():
         result = warehouse.fetch_all(operation)
 
     past = [i[0] for i in result]
-    # print(past)
     return past
 
 
@@ -44,12 +43,9 @@ def get_winners(tour_id):
     soup = BeautifulSoup(page.content, "html.parser")
     results = soup.find_all('td')
     for result in results:
-        # print('results')
-        # print(result.text)
         if 'Match' in result.text:
             matches = result.text
             matches = matches.split('Match')
-            # print(matches)
             games = []
             for match in matches:
                 match = match.replace('\r\n\xa0\xa0\xa0\xa0\xa0\n','')
@@ -57,19 +53,14 @@ def get_winners(tour_id):
                 match = match.replace('\r','')
                 if match.startswith(' '):
                     games.append(match)
-                    # print(match)
 
     for game in games:
-        # print(game)
+        game = game.replace("'","")
         winners = game[game.find(':')+1:game.find('(')]
         winners = winners.strip().split(' / ')
         losers = game[game.find('f.')+2:game.find('(',game.find('(')+2)]
         losers = losers.strip().split(' / ')
-        # print(winners)
-        # print(losers)
-        # print([tour_id]+winners+losers)
         outcomes.append([tour_id]+winners+losers)
-    # print(outcomes)
     return outcomes
 
 @task
@@ -90,16 +81,17 @@ def import_avp_matches(year=current_year):
     tournaments = get_avp_tournaments(year)
     print(tournaments)
     avp = avp_data(tournaments)
-    for tournament in avp:
-        for match in tournament:
-            query = f'''
-               insert `truvolley.volleyball_matches` (tournament_id,winner_1,winner_2,loser_1,loser_2)
-               values({match[0]},"{match[1]}","{match[2]}","{match[3]}","{match[4]}")
-               '''
-            print(query)
+    with BigQueryWarehouse.load("truvolley", validate=False) as warehouse:
+        for tournament in avp:
+            for match in tournament:
+                print(match)
+                if len(match)==5:
+                    query = f'''
+                       insert `truvolley.volleyball_matches` (tournament_id,winner_1,winner_2,loser_1,loser_2)
+                       values({match[0]},"{match[1]}","{match[2]}","{match[3]}","{match[4]}")
+                   '''
 
-            with BigQueryWarehouse.load("truvolley", validate=False) as warehouse:
-                operation = query
-                warehouse.execute(operation)
+                    operation = query
+                    warehouse.execute(operation)
 
 import_avp_matches()
