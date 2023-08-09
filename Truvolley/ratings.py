@@ -1,6 +1,7 @@
 from prefect import flow, task
 from prefect_gcp.bigquery import BigQueryWarehouse
 import polars as pl
+import Glicko_Rating
 
 @flow
 def get_matches():
@@ -139,7 +140,7 @@ def get_results(df,teams):
 def new_ratings(results):
     updated_stats=[]
     for result in results:
-        updates = glicko_scratch.Player(rating=(result[1] + result[2])/2,rd=(result[3] + result[4])/2,vol=result[5])
+        updates = Glicko_Rating.Player(rating=(result[1] + result[2])/2,rd=(result[3] + result[4])/2,vol=result[5])
         updates.update_player(result[6], result[7], result[8])
         p1_rate = (result[1] / (result[1] + result[2])) * updates.rating * 2
         p2_rate = (result[2] / (result[1] + result[2])) * updates.rating * 2
