@@ -7,7 +7,8 @@ import Glicko_Rating
 def get_matches():
     query = '''
     select *
-    FROM `rare-mender-353319.truvolley.volleyball_matches` 
+    FROM `rare-mender-353319.truvolley.volleyball_matches`
+    where tournament_id < 3320 
     '''
     with BigQueryWarehouse.load("truvolley", validate=False) as warehouse:
         operation = query
@@ -140,8 +141,10 @@ def get_results(df,teams):
 def new_ratings(results):
     updated_stats=[]
     for result in results:
-        updates = Glicko_Rating.Player(rating=(result[1] + result[2])/2,rd=(result[3] + result[4])/2,vol=result[5])
+
+        updates = Glicko_Rating.Player(rating=(result[1] + result[2])/2,rd=(result[3] + result[4])/2,vol=round(result[5],5))
         updates.update_player(result[6], result[7], result[8])
+
         p1_rate = (result[1] / (result[1] + result[2])) * updates.rating * 2
         p2_rate = (result[2] / (result[1] + result[2])) * updates.rating * 2
         p1_rd = (result[3] / (result[3] + result[4])) * updates.rd * 2
@@ -150,8 +153,7 @@ def new_ratings(results):
         player = result[0].split('_')
         player_1 = [player[0],p1_rate,p1_rd,updates.vol]
         player_2 = [player[1], p2_rate, p2_rd, updates.vol]
-        # print(player_1)
-        # print(player_2)
+
         updated_stats.append(player_1)
         updated_stats.append(player_2)
     return updated_stats
@@ -166,7 +168,6 @@ def tru_rating():
     tournaments = matches.select(pl.col('tournament_id')).unique().sort('tournament_id')
     for i in range(len(tournaments)):
         tournament = tournaments.row(i)[0]
-        print(tournament)
 
         df = matches.filter(pl.col('tournament_id') == tournament)
         df = add_teams(df)
@@ -176,14 +177,15 @@ def tru_rating():
         ratings = new_ratings(results)
         ratings = pl.DataFrame(ratings,schema=['players','rating','rd','vol']).unique()
         ratings = ratings.groupby('players').max()
+        print(tournament)
         for i in range(len(ratings)):
             row = ratings.row(i)
             print(row)
             query = f'''
-                   insert `truvolley.volleyball_matches` (player_name,tournament,rating,rd,vol)
+                   insert `truvolley.players` (player_name,tournament,rating,rd,vol)
                    values("{row[0]}",{tournament},{row[1]},{row[2]},{row[3]})
                    '''
-            print(query)
+            # print(query)
 
             with BigQueryWarehouse.load("truvolley", validate=False) as warehouse:
                 operation = query
