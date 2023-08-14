@@ -27,7 +27,7 @@ pull:
 - prefect.deployments.steps.git_clone:
     repository: git@github.com:riellygriff/Truvolley.git
     branch: main
-    access_token: null
+    credentials: "{{ prefect.blocks.github-credentials.github-repo-token}}"
 
 # the deployments section allows you to provide configuration for deploying flows
 deployments:
@@ -42,4 +42,5 @@ deployments:
   work_pool:
     name: cloud-run-pool
     job_variables:
-      image: us-west1-docker.pkg.dev/rare-mender-353319/rielly-personal/truvolley
+      image: riellygriff21/truvolley
+      #image: us-west1-docker.pkg.dev/rare-mender-353319/rielly-personal/truvolley

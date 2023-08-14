@@ -46,5 +46,5 @@ build-docker:
 
 # Push Docker Image
 push-docker:
-    docker push riellygriff21/Truvolley:latest
+    docker push riellygriff21/truvolley:latest
 
