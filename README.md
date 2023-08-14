@@ -1,7 +1,7 @@
 # Truvolley
 
 ## Overview
-![diagram](images/diagram)
+![diagram](Images/Diagram.png)
 
 ## Data
 The data for this project was scraped from bvbinfo.com. It contains all AVP matchces from 2013 onward. FIVB matches will be added in the future as well.
