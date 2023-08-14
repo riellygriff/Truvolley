@@ -74,10 +74,10 @@ def avp_data(tournaments):
             print(f'tournament {tournament} had no matches : {e}')
     return results
 
-current_year = datetime.date.today().year
 
 @flow
-def import_avp_matches(year=current_year):
+def import_avp_matches():
+    year = datetime.date.today().year
     tournaments = get_avp_tournaments(year)
     print(tournaments)
     avp = avp_data(tournaments)
@@ -94,4 +94,5 @@ def import_avp_matches(year=current_year):
                     operation = query
                     warehouse.execute(operation)
 
-import_avp_matches()
+if __name__=='__main__':
+    import_avp_matches()

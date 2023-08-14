@@ -8,7 +8,7 @@ def get_matches():
     query = '''
     select *
     FROM `rare-mender-353319.truvolley.volleyball_matches`
-    where tournament_id < 3320 
+
     '''
     with BigQueryWarehouse.load("truvolley", validate=False) as warehouse:
         operation = query
@@ -192,4 +192,5 @@ def tru_rating():
                 warehouse.execute(operation)
         players = players.update(ratings,on='players',how='outer')
 
-tru_rating()
+if __name__=='__main__':
+    tru_rating()

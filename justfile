@@ -42,7 +42,7 @@ pre-commit:
 home_dir := env_var('HOME')
 # Build Docker Image
 build-docker:
-    docker build . -t riellygriff21/Truvolley --platform linux/amd64
+    docker build . -t riellygriff21/truvolley --platform linux/amd64
 
 # Push Docker Image
 push-docker:
