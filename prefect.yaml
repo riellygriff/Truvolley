@@ -27,7 +27,7 @@ pull:
 - prefect.deployments.steps.git_clone:
     repository: git@github.com:riellygriff/Truvolley.git
     branch: main
-    access_token: "{{ prefect.blocks.github-credentials.github-repo-token}}"
+    credentials: "{{ prefect.blocks.github-credentials.github-repo-token}}"
 
 # the deployments section allows you to provide configuration for deploying flows
 deployments:
