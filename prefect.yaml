@@ -25,7 +25,7 @@ prefect-version: 2.10.21
 # pull section allows you to provide instructions for cloning this project in remote locations
 pull:
 - prefect.deployments.steps.git_clone:
-    repository: git@github.com:riellygriff/Truvolley.git
+    repository: https://github.com/riellygriff/Truvolley.git
     branch: main
     credentials: "{{ prefect.blocks.github-credentials.github-repo-token}}"
 
